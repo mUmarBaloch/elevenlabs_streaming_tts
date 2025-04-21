@@ -1,7 +1,7 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'dart:async';
-
 class ElevenLabsStreamAudioSource extends StreamAudioSource {
   final Uri url;
   final Map<String, String> headers;
@@ -35,3 +35,18 @@ class ElevenLabsStreamAudioSource extends StreamAudioSource {
     );
   }
 }
+
+// http method , without elevenlabs package
+ Future<void> _startStreaming() async {
+    final source = ElevenLabsStreamAudioSource(
+      url: Uri.parse(
+          'https://api.elevenlabs.io/v1/text-to-speech/CwhRBWXzGAHq8TQ4Fs17/stream'),
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'audio/mpeg',
+        'xi-api-key': dotenv.env['ELEVENLABS_API_KEY']!,
+      },
+      body: '{"text":"Hello World, this is a test of streaming API , lets see does it works or not"}',
+    );
+
+  }

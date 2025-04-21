@@ -1,0 +1,1 @@
+C:\Users\fattani computers\Desktop\flutterProjects\elevenlabs_streaming_tts\build\app\intermediates\cxx\Debug\606a6a5b\obj\arm64-v8a

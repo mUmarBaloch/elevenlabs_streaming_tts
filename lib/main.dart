@@ -1,7 +1,6 @@
-import 'package:elevenlabs_flutter/elevenlabs_config.dart';
+
 import 'package:elevenlabs_streaming_tts/stream.dart';
 import 'package:flutter/material.dart';
-import 'package:elevenlabs_flutter/elevenlabs_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

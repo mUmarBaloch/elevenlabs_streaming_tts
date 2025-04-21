@@ -1,3 +1,6 @@
+import 'package:elevenlabs_flutter/elevenlabs_config.dart';
+import 'package:elevenlabs_flutter/elevenlabs_flutter.dart';
+import 'package:elevenlabs_flutter/elevenlabs_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:just_audio/just_audio.dart';
@@ -12,40 +15,38 @@ class TTSScreen extends StatefulWidget {
 }
 
 class _TTSScreenState extends State<TTSScreen> {
-  final player = AudioPlayer();
+   late ElevenLabsAPI? _elevenLabsAPI;
+   final AudioPlayer _audioPlayer = AudioPlayer();
 late ElevenLabsStreamAudioSource source ;
-  Future<void> _startStreaming() async {
-    source = ElevenLabsStreamAudioSource(
-      url: Uri.parse(
-          'https://api.elevenlabs.io/v1/text-to-speech/CwhRBWXzGAHq8TQ4Fs17/stream'),
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'audio/mpeg',
-        'xi-api-key': dotenv.env['ELEVENLABS_API_KEY']!,
-      },
-      body: '{"text":"Hello World, this is a test of streaming API , lets see does it works or not"}',
-    );
-
-  }
+ 
 
   @override
   void initState() {
+    final apiKey=dotenv.env['ELEVENLABS_API_KEY']!;
+      _elevenLabsAPI = ElevenLabsAPI();
+    _elevenLabsAPI?.init(
+      config: ElevenLabsConfig(apiKey:apiKey,baseUrl: 'https://api.elevenlabs.io'),
+    );
     super.initState();
-    _startStreaming();
+   
   }
 
+  Future<void> _speak(String text) async {
+    try {
+      final file = await _elevenLabsAPI?.synthesize(
+        TextToSpeechRequest(text: text,voiceId: 'CwhRBWXzGAHq8TQ4Fs17'),
+      );
+      await _audioPlayer.setFilePath(file!.path);
+      _audioPlayer.play();
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return  Center(child: ElevatedButton(
   onPressed: () async {
-    final player = AudioPlayer();
-   
-    try {
-      await player.setAudioSource(source);
-      await player.play();
-    } catch (e) {
-      print('Error: $e');
-    }
+  _speak('Hello world, this is a real-time voice stream from Eleven Labs.');
   },
   child: Text('Play TTS'),
 )

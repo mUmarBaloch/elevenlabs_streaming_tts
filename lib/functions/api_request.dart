@@ -22,7 +22,8 @@ class ElevenLabsStreamAudioSource extends StreamAudioSource {
     final response = await request.send();
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to stream audio');
+
+      throw Exception('Failed to stream audio : ${response.stream.first.then((_)=>print(_))}, ${response.statusCode}');
     }
 
     return StreamAudioResponse(

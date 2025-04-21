@@ -13,25 +13,19 @@ class TTSScreen extends StatefulWidget {
 
 class _TTSScreenState extends State<TTSScreen> {
   final player = AudioPlayer();
-
+late ElevenLabsStreamAudioSource source ;
   Future<void> _startStreaming() async {
-    final source = ElevenLabsStreamAudioSource(
+    source = ElevenLabsStreamAudioSource(
       url: Uri.parse(
-          'https://api.elevenlabs.io/v1/text-to-speech/YOUR_VOICE_ID/stream'),
+          'https://api.elevenlabs.io/v1/text-to-speech/CwhRBWXzGAHq8TQ4Fs17/stream'),
       headers: {
         'Content-Type': 'application/json',
         'accept': 'audio/mpeg',
         'xi-api-key': dotenv.env['ELEVENLABS_API_KEY']!,
       },
-      body: '{"text":"Hello World"}',
+      body: '{"text":"Hello World, this is a test of streaming API , lets see does it works or not"}',
     );
 
-    try {
-      await player.setAudioSource(source);
-      await player.play();
-    } catch (e) {
-      print('Error playing stream: $e');
-    }
   }
 
   @override
@@ -42,6 +36,19 @@ class _TTSScreenState extends State<TTSScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return  Center(child: ElevatedButton(
+  onPressed: () async {
+    final player = AudioPlayer();
+   
+    try {
+      await player.setAudioSource(source);
+      await player.play();
+    } catch (e) {
+      print('Error: $e');
+    }
+  },
+  child: Text('Play TTS'),
+)
+,);
   }
 }
